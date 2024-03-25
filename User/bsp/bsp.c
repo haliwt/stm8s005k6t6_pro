@@ -37,6 +37,8 @@ void bsp_Init(void)
 
 	ADC_NTC_Init();
 
+	Relay_Init();
+
 	/* CPU复位后程所有的中断被禁止，必须通过RIM指令来使能它们*/
 	enableInterrupts();	/* 使能中断。这个宏在 stm8s.h 中定义 */
 

@@ -1,5 +1,7 @@
 #ifndef __BSP_RELAY_H
 #define __BSP_RELAY_H
+#include "stm8s.h"
+
 
 /* 定义按键IO */
 /* 定义按键IO */

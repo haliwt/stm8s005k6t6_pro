@@ -1,5 +1,6 @@
 #include "bsp.h"
 
+relay_state_t grelay_t;
 
 uint8_t (*led_tape_state)(void);
 uint8_t (*fan_state)(void);
@@ -53,7 +54,7 @@ void Relay_Init(void)
 ************************************************************************************************/
 static uint8_t led_tape_default_fun(void)
 {
-    if(grelay_t.led_tape_state == 1) return 1;
+    if(grelay_t.led_tape == 1) return 1;
     else return 0;
 
 }
@@ -66,7 +67,7 @@ void Relay_Tape_Hander(uint8_t (*tape_handler)(void))
 //FAN RELAY
 static uint8_t fan_default_fun(void)
 {
-    if(grelay_t.fan_state == 1) return 1;
+    if(grelay_t.fan == 1) return 1;
     else return 0;
 }
 
@@ -77,7 +78,7 @@ void Relay_Fan_Hander(uint8_t (*fan_handler)(void))
 //KILL RELAY
 static uint8_t kill_default_fun(void)
 {
-    if(grelay_t.kill_state == 1) return 1;
+    if(grelay_t.kill == 1) return 1;
     else return 0;
 
 }
@@ -90,7 +91,7 @@ void Relay_Kill_Hander(uint8_t (*kill_handler)(void))
 //keep temperature value 
 static uint8_t temp_default_fun(void)
 {
-    if(grelay_t.temp_state == 1) return 1;
+    if(grelay_t.temp == 1) return 1;
     else return 0;
 }
 void Relay_Temp_Hander(uint8_t (*temp_handler)(void))
