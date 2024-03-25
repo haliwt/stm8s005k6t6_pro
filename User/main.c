@@ -47,7 +47,7 @@ void main(void)
 	printf("   K2键长按2秒产生1次常按事件,之后按照20ms的速度自动重发键值\r\n");	
 
 	/* 设置 K1键长按1秒后，自动连发，连发速度（间隔几个10ms）为每100ms一个，也就是每秒10个 */
-	bsp_SetKeyParam(KID_K1,100, 10);
+	//bsp_SetKeyParam(KID_K1,100, 10);
 	
 	/* 设置 K2键长按2秒后，自动连发，连发速度（间隔几个10ms）为每20ms一个，也就是每秒50个 */
 	bsp_SetKeyParam(KID_K2,200, 2);
@@ -61,32 +61,20 @@ void main(void)
         {
 			switch (ucKeyCode)
 			{
-				case KEYDOWN_K1:
+				case KEYDOWN_SET:
 				  	printf("K1键 按下 %d\r\n", iCount++);
 			  		break;
+		
 
-				case KEYLONG_K1:
-				  	printf("K1键 长按事件\r\n");
-			  		break;					
-
-				case KEYDOWN_K2:
+				case KEYDOWN_OK:
 					printf("K2键 按下 %d\r\n", iCount--);
 			  		break;
 
-				case KEYLONG_K2:
+				case KEYLONG_OK:
 				  	printf("K2键 长按事件\r\n");
 			  		break;							
 
-				case KEYDOWN_OK:
-				  	iCount = 0;
-				  	printf("OK键 按下, %d\r\n", iCount);
-					bsp_LedOn(1);	/* 点亮LED1 */
-			  		break;			
-
-				case KEYUP_OK:
-				  	printf("OK键 弹起\r\n");
-					bsp_LedOff(1);	/* 点亮LED2 */
-			  		break;							
+					
 			}
     	}
 	}

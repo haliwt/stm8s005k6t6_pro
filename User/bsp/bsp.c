@@ -29,14 +29,18 @@ void bsp_Init(void)
 {
 	bsp_InitTimer();	/* 初始化系统滴答定时器 */
 
-	bsp_InitUart(115200); 	/* 初始化串口 */
+	bsp_InitUart(9600); 	/* 初始化串口 */
 	
 	bsp_InitLed();			/* 初始化LED端口 */
 
 	bsp_InitButton();		/* 初始化按键 */
 
+	ADC_NTC_Init();
+
 	/* CPU复位后程所有的中断被禁止，必须通过RIM指令来使能它们*/
 	enableInterrupts();	/* 使能中断。这个宏在 stm8s.h 中定义 */
+
+	
 }
 
 /*
@@ -80,4 +84,4 @@ void bsp_Idle(void)
 	;
 }
 
-/***************************** 安富莱电子 www.armfly.com (END OF FILE) *********************************/
+

@@ -38,12 +38,12 @@ static void bsp_DetectButton(uint8_t _ucIndex);
 *	返 回 值: 返回值1 表示按下，0表示未按下
 *********************************************************************************************************
 */
-static uint8_t IsKeyDown1(void)
+static uint8_t IsKeyDownSet(void)
 { 
-	if ((GPIO_KEY1->IDR & PIN_KEY1) == 0) return 1; else return 0;
+	if ((GPIO_KEY_SET->IDR & PIN_SET) == 0) return 1; else return 0;
 };
-static uint8_t IsKeyDown2(void){ if ((GPIO_KEY2->IDR & PIN_KEY2) == 0) return 1; else return 0;};
-static uint8_t IsKeyDown3(void){ if ((GPIO_KEY3->IDR & PIN_KEY3) == 0) return 1; else return 0;};
+static uint8_t IsKeyDownOK(void){ if ((GPIO_KEY_OK->IDR & PIN_OK) == 0) return 1; else return 0;};
+//static uint8_t IsKeyDown3(void){ if ((GPIO_KEY3->IDR & PIN_KEY3) == 0) return 1; else return 0;};
 
 /*
 *********************************************************************************************************
@@ -159,9 +159,9 @@ void bsp_SetKeyParam(uint8_t _ucKeyID, uint16_t _LongTime, uint8_t  _RepeatSpeed
 static void bsp_InitButtonHard(void)
 {
 	/* 配置按键采样口为输入上拉，无中断 */
-	GPIO_Init(GPIO_KEY1, (GPIO_Pin_TypeDef)PIN_KEY1, GPIO_MODE_IN_PU_NO_IT);
-	GPIO_Init(GPIO_KEY2, (GPIO_Pin_TypeDef)PIN_KEY2, GPIO_MODE_IN_PU_NO_IT);
-	GPIO_Init(GPIO_KEY3, (GPIO_Pin_TypeDef)PIN_KEY3, GPIO_MODE_IN_PU_NO_IT);	
+	GPIO_Init(GPIO_KEY_SET, (GPIO_Pin_TypeDef)PIN_SET, GPIO_MODE_IN_PU_NO_IT);
+	GPIO_Init(GPIO_KEY_OK, (GPIO_Pin_TypeDef)PIN_OK, GPIO_MODE_IN_PU_NO_IT);
+	//GPIO_Init(GPIO_KEY3, (GPIO_Pin_TypeDef)PIN_KEY3, GPIO_MODE_IN_PU_NO_IT);	
 }
 
 /*
@@ -192,9 +192,9 @@ static void bsp_InitButtonVar(void)
 	}
 
 	/* 判断按键按下的函数 */
-	s_tBtn[0].IsKeyDownFunc = IsKeyDown1;
-	s_tBtn[1].IsKeyDownFunc = IsKeyDown2;
-	s_tBtn[2].IsKeyDownFunc = IsKeyDown3;
+	s_tBtn[0].IsKeyDownFunc = IsKeyDownSet;
+	s_tBtn[1].IsKeyDownFunc = IsKeyDownOK;
+	//s_tBtn[2].IsKeyDownFunc = IsKeyDown3;
 }
 
 /*
@@ -308,4 +308,4 @@ void bsp_KeyPro(void)
 }
 
 
-/***************************** 安富莱电子 www.armfly.com (END OF FILE) *********************************/
+

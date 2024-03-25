@@ -1,8 +1,8 @@
 /*
 *********************************************************************************************************
 *
-* be used to TIM1 as tick timer timing 
-* Timer Timing interrupt is 1ms
+* Pet_B voice sound TIM14 is timer timing 1ms
+*	
 *
 *********************************************************************************************************
 */
@@ -11,8 +11,8 @@
 #include "bsp_timer.h"
 #include "bsp.h"
 
-#define ENABLE_SYSTICK_INT()	TIM1_ITConfig(TIM1_IT_UPDATE, ENABLE)//TIM4_ITConfig(TIM4_IT_UPDATE, ENABLE)
-#define DISABLE_SYSTICK_INT()	TIM1_ITConfig(TIM1_IT_UPDATE, DISABLE)//TIM4_ITConfig(TIM4_IT_UPDATE, DISABLE)
+#define ENABLE_SYSTICK_INT()	TIM4_ITConfig(TIM4_IT_UPDATE, ENABLE)
+#define DISABLE_SYSTICK_INT()	TIM4_ITConfig(TIM4_IT_UPDATE, DISABLE)
 
 /*
 	在此定义若干个软件定时器全局变量
@@ -34,7 +34,7 @@ static void (*s_TIM2_CallBack2)(void);
 static void (*s_TIM2_CallBack3)(void);
 
 static void bsp_SoftTimerDec(SOFT_TMR *_tmr);
-static void TIM1_Config(void);
+static void TIM4_Config(void);
 
 /*
 *********************************************************************************************************
@@ -62,7 +62,7 @@ void bsp_InitTimer(void)
 		g_Tmr[i].Mode = TMR_ONCE_MODE;	/* 缺省是1次性工作模式 */
 	}
 
-	TIM1_Config();
+	TIM4_Config();
 }
 
 /*
@@ -80,7 +80,7 @@ void SysTick_ISR(void)
 	static uint8_t s_count = 0;
 	uint8_t i;
 
-	TIM1_ClearITPendingBit(TIM1_IT_UPDATE);
+	TIM4_ClearITPendingBit(TIM4_IT_UPDATE);
 	//TIM4_ClearFlag(TIM4_FLAG_UPDATE);
 
 	/* 每隔1ms进来1次 */
@@ -353,7 +353,7 @@ void bsp_DelayUS(uint16_t _usDelay)
 */
 void bsp_ConfgiSysClk(SYS_CLK_E _iSysClk)
 {
-#if 1	/* 空间不足，优化代码, 只保留需要的时钟设置 */
+	/* 空间不足，优化代码, 只保留需要的时钟设置 */
 	if (_iSysClk == HSI_16M)
 	{
 		/* 自动切换, 切换到内部高速时钟HSI, 禁止系统时钟中断, 关闭当前的时钟源  */
@@ -361,80 +361,42 @@ void bsp_ConfgiSysClk(SYS_CLK_E _iSysClk)
 		CLK_HSIPrescalerConfig(CLK_PRESCALER_HSIDIV1);  /* 设置内部高速RC时钟HSI为时钟源，分频系数为1 */
 		while (CLK_GetFlagStatus(CLK_FLAG_HSIRDY) == RESET);	/* 等待HSI时钟稳定 */
 	}
-#else
-	switch (_iSysClk)
-	{
-		case HSE_XTAL:
-			/* 自动切换, 切换到外部高速时钟HSE, 禁止系统时钟中断, 关闭当前的时钟源  */
-			CLK_ClockSwitchConfig(CLK_SWITCHMODE_AUTO, CLK_SOURCE_HSE, DISABLE, CLK_CURRENTCLOCKSTATE_DISABLE);
-			break;
 
-		case LSI_128K:
-			/* 自动切换, 切换到内部低速时钟LSI, 禁止系统时钟中断, 关闭当前的时钟源  */
-			CLK_ClockSwitchConfig(CLK_SWITCHMODE_AUTO, CLK_SOURCE_LSI, DISABLE, CLK_CURRENTCLOCKSTATE_DISABLE);
-			break;
-
-		case HSI_16M:
-			/* 自动切换, 切换到内部高速时钟HSI, 禁止系统时钟中断, 关闭当前的时钟源  */
-			CLK_ClockSwitchConfig(CLK_SWITCHMODE_AUTO, CLK_SOURCE_HSI, DISABLE, CLK_CURRENTCLOCKSTATE_DISABLE);
-			CLK_HSIPrescalerConfig(CLK_PRESCALER_HSIDIV1);  /* 设置内部高速RC时钟HSI为时钟源，分频系数为1 */
-			while (CLK_GetFlagStatus(CLK_FLAG_HSIRDY) == RESET);	/* 等待HSI时钟稳定 */
-			break;
-
-		case HSI_8M:
-			/* 自动切换, 切换到内部高速时钟HSI, 禁止系统时钟中断, 关闭当前的时钟源  */
-			CLK_ClockSwitchConfig(CLK_SWITCHMODE_AUTO, CLK_SOURCE_HSI, DISABLE, CLK_CURRENTCLOCKSTATE_DISABLE);
-			CLK_HSIPrescalerConfig(CLK_PRESCALER_HSIDIV2);  /* 设置内部高速RC时钟HSI为时钟源，分频系数为2 */
-			while (CLK_GetFlagStatus(CLK_FLAG_HSIRDY) == RESET);	/* 等待HSI时钟稳定 */
-			break;
-
-		case HSI_4M:
-			/* 自动切换, 切换到内部高速时钟HSI, 禁止系统时钟中断, 关闭当前的时钟源  */
-			CLK_ClockSwitchConfig(CLK_SWITCHMODE_AUTO, CLK_SOURCE_HSI, DISABLE, CLK_CURRENTCLOCKSTATE_DISABLE);
-			CLK_HSIPrescalerConfig(CLK_PRESCALER_HSIDIV4);  /* 设置内部高速RC时钟HSI为时钟源，分频系数为4 */
-			while (CLK_GetFlagStatus(CLK_FLAG_HSIRDY) == RESET);	/* 等待HSI时钟稳定 */
-			break;
-
-		case HSI_2M:
-			/* 自动切换, 切换到内部高速时钟HSI, 禁止系统时钟中断, 关闭当前的时钟源  */
-			CLK_ClockSwitchConfig(CLK_SWITCHMODE_AUTO, CLK_SOURCE_HSI, DISABLE, CLK_CURRENTCLOCKSTATE_DISABLE);
-			CLK_HSIPrescalerConfig(CLK_PRESCALER_HSIDIV8);  /* 设置内部高速RC时钟HSI为时钟源，分频系数为8 */
-			while (CLK_GetFlagStatus(CLK_FLAG_HSIRDY) == RESET);	/* 等待HSI时钟稳定 */
-			break;
-
-		default:
-			break;
-	}
-#endif
 }
 
 /*
 *********************************************************************************************************
-*	Function Name: TIM1_Config
-*	Function: timer timing is interrupt is 1ms
+*	Function Name: TIM4_Config
+*	Function: TIM4 timer timing is 1ms
 *	形    参：无
 *	返 回 值: 无
 *********************************************************************************************************
 */
-static void TIM1_Config(void)
+static void TIM4_Config(void)
 {
-    /* TIM1 Peripheral Configuration */ 
-  	TIM1_DeInit();   
 
-	/* Time Base configuration */
-    TIM1_TimeBaseInit(0,TIM1_COUNTERMODE_UP,16000, 0); //F=16MHz,1ms.
+  /* TIM4 configuration:
+   - TIM4CLK is set to 16 MHz, the TIM4 Prescaler is equal to 128 so the TIM1 counter
+   clock used is 16 MHz / 128 = 125 000 Hz
+  - With 125 000 Hz we can generate time base:
+      max time base is 2.048 ms if TIM4_PERIOD = 255 --> (255 + 1) / 125000 = 2.048 ms
+      min time base is 0.016 ms if TIM4_PERIOD = 1   --> (  1 + 1) / 125000 = 0.016 ms
+  - In this example we need to generate a time base equal to 1 ms
+   so TIM4_PERIOD = (0.001 * 125000 - 1) = 124 */
 
-	
-	/* Clear TIM1 update flag */
-	TIM1_ClearFlag(TIM1_FLAG_UPDATE);
 
-	TIM1_ITConfig(TIM1_IT_UPDATE, ENABLE);  /* 使能TIM4中断 */
-	//TIM1_UpdateDisableConfig(ENABLE);		/* 使能TIM4自动溢出事件 */
+	TIM4_DeInit();                  		/* 复位TIM4所有寄存器 */
+	TIM4_ARRPreloadConfig(ENABLE);  		/* 预先装载使能 */
 
-	 /* Time Base configuration */
-    TIM1_ARRPreloadConfig(ENABLE);
+	TIM4_TimeBaseInit(TIM4_PRESCALER_128,124);	/* timer timing is 1ms */
 
-	TIM1_Cmd(ENABLE);						/* 使能TIM4 */
+	/* Clear TIM4 update flag */
+	TIM4_ClearFlag(TIM4_FLAG_UPDATE);
+
+	TIM4_ITConfig(TIM4_IT_UPDATE, ENABLE);  /* 使能TIM4中断 */
+	//TIM4_UpdateDisableConfig(ENABLE);		/* 使能TIM4自动溢出事件 */
+
+	TIM4_Cmd(ENABLE);						/* 使能TIM4 */
 
 
 }
@@ -549,3 +511,4 @@ void TIM2_ISR(void)
     }
 }
 
+/***************************** 安富莱电子 www.armfly.com (END OF FILE) *********************************/

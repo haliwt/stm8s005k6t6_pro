@@ -14,31 +14,31 @@
 #ifndef __BSP_KEY_H
 #define __BSP_KEY_H
 
-#define BUTTON_COUNT	3		/* 3个普通按键 */
+#define BUTTON_COUNT	2		/* 3个普通按键 */
 
 /* 定义按键IO */
 /* 定义按键IO */
-#define GPIO_KEY1	GPIOC
-#define PIN_KEY1 	GPIO_PIN_1		/* 独立按键 key1 键  */
+#define GPIO_KEY_SET		GPIOE
+#define PIN_SET 	     	GPIO_PIN_5		/* 独立按键 key1 键  */
 
-#define GPIO_KEY2	GPIOC
-#define PIN_KEY2 	GPIO_PIN_2		/* 独立按键 key2 键 */
+#define GPIO_KEY_OK			GPIOB
+#define PIN_OK 				GPIO_PIN_0		/* 独立按键 key2 键 */
 
-#define GPIO_KEY3	GPIOC
-#define PIN_KEY3 	GPIO_PIN_3		/* 编码器OK键 */
+//#define GPIO_KEY3	GPIOC
+//#define PIN_KEY3 	GPIO_PIN_3		/* 编码器OK键 */
 
 /* 根据应用程序功能定义按键宏 */
-#define KEYDOWN_K1	    KEY_1_DOWN
-#define KEYUP_K1		KEY_1_UP
-#define KEYLONG_K1     	KEY_1_LONG
+#define KEYDOWN_SET	    KEY_SET_DOWN
+#define KEYUP_K1		KEY_SET_UP
+#define KEYLONG_K1     	KEY_SET_LONG
 
-#define KEYDOWN_K2	    KEY_2_DOWN
-#define KEYUP_K2		KEY_2_UP
-#define KEYLONG_K2     	KEY_2_LONG
+#define KEYDOWN_OK	    KEY_OK_DOWN
+#define KEYUP_K2		KEY_OK_UP
+#define KEYLONG_OK     	KEY_OK_LONG
 
-#define KEYDOWN_OK		KEY_3_DOWN
-#define KEYUP_OK		KEY_3_UP
-#define KEYLONG_OK		KEY_3_LONG
+//#define KEYDOWN_OK		KEY_3_DOWN
+//#define KEYUP_OK		KEY_3_UP
+//#define KEYLONG_OK		KEY_3_LONG
 
 /* 按键滤波时间50ms, 单位10ms
  只有连续检测到50ms状态不变才认为有效，包括弹起和按下两种事件
@@ -72,17 +72,15 @@ typedef enum
 {
 	KEY_NONE = 0,			/* 0 表示按键事件 */
 
-	KEY_1_DOWN,				/* 1键按下 */
-	KEY_1_UP,				/* 1键弹起 */
-	KEY_1_LONG,				/* 1键长按 */
+	KEY_SET_DOWN,				/* 1键按下 */
+	KEY_SET_UP,				/* 1键弹起 */
+	KEY_SET_LONG,				/* 1键长按 */
 
-	KEY_2_DOWN,				/* 2键按下 */
-	KEY_2_UP,				/* 2键弹起 */
-	KEY_2_LONG,				/* 2键长按 */
+	KEY_OK_DOWN,				/* 2键按下 */
+	KEY_OK_UP,				/* 2键弹起 */
+	KEY_OK_LONG,				/* 2键长按 */
 
-	KEY_3_DOWN,				/* 2键按下 */
-	KEY_3_UP,				/* 2键弹起 */
-	KEY_3_LONG,				/* 2键长按 */	
+
 }KEY_ENUM;
 
 /* 按键ID */

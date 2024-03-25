@@ -25,9 +25,14 @@
 //#include "bsp_stm8_eeprom.h"
 #include "bsp_led.h"
 
+//relay ctl 
+#include "bsp_relay.h"
+#include "bsp_smg.h"
+#include "bsp_ntc.h"
+
 void bsp_Init(void);
 void bsp_Idle(void);
 
 #endif
 
-/***************************** 安富莱电子 www.armfly.com (END OF FILE) *********************************/
+
